@@ -1,8 +1,26 @@
-print('a')
-print('-'*20)
-print('1.아이디 생성')
-print('2. 비번 번경')
-print('3. 아이디 목록 ')
-print('4. 종료')
-print('-'*20)
-select_no = int(input('번호 선택(~4): '))
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
+
+#UI파일 연결
+#단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
+form_class = uic.loadUiType("test.ui")[0]
+
+#화면을 띄우는데 사용되는 Class 선언
+class WindowClass(QMainWindow, form_class) :
+    def __init__(self) :
+        super().__init__() # 상속받은 Qmain을 쓸려고 하는거래
+        self.setupUi(self)
+
+if __name__ == "__main__" :
+    #QApplication : 프로그램을 실행시켜주는 클래스
+    app = QApplication(sys.argv) 
+
+    #WindowClass의 인스턴스 생성
+    myWindow = WindowClass() 
+
+    #프로그램 화면을 보여주는 코드
+    myWindow.show()
+
+    #프로그램을 이벤트루프로 진입시키는(프로그램을 작동시키는) 코드
+    app.exec_()
