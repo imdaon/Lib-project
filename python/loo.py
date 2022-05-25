@@ -5,11 +5,12 @@ import re
 import os
 import time
 
+regist_id = []   # 등록한 id 리스트
 
 def make_id(regist_user):  # 아이디생성 함수
-    regist_id = []   # 등록한 id 리스트
+    
     while 1:
-        uid = str(input('회원 아이디 입력: '))
+        uid = str(input('아이디를 입력하세요: '))
         if uid in regist_user:  # 아이디 중복 확인
             print('중복됨 ㅇㅇ')
             ex = input('메인 화면으로 이동? ㅋㅋ (y/n): ')
@@ -26,13 +27,27 @@ def make_id(regist_user):  # 아이디생성 함수
                 break
 
     while 1:
-        pwd = str(input('비번입력해라: '))
+        pwd = str(input('비밀번호를 입력하세요: '))
         res_pwd = chk_password(pwd)  # chk로 비번 조건 확인
         if not res_pwd:
             continue
         else:
             regist_id.append(pwd)  # 조건 만족 시 추가 (생성)
+            break
 
+    while 1:
+        name = str(input('이름을 입력하세요: '))
+        if not name:
+            continue
+        else:
+            regist_id.append(name)  # 조건 만족 시 추가 (생성)
+            break
+    while 1:
+        num = str(input('번호를 입력하세요: '))
+        if not num:
+            continue
+        else:
+            regist_id.append(num)  # 조건 만족 시 추가 (생성)
             break
 
     return regist_id
@@ -57,7 +72,7 @@ def chk_password(pwd):  # 비번만들때 조건 영어&숫자 4글자 이상
     return result
 
 
-def edit_password(uid, pwd):  # 비밀번호 찾기
+def change_password(uid, pwd):  # 비밀번호 찾기
     n_pwd = ''
     while 1:
         pw = str(input('새로운 비번 입력:'))
@@ -80,38 +95,43 @@ def main():
     regist_user = {}    # regist_user 딕셔너리 (만든 아이디 저장)
     sw = 1  # while문 1 or 0 조건을 위해 선언
     while sw:
-        print('-'*20)
+        print('-'*30)
         print('1. 아이디 생성(영어4글자이상)')
-        print('2. 비밀번호 찾기')
+        print('2. 아이디 & 비밀번호 찾기')
         print('3. 아이디 목록 ')
         print('4. 로그인 ')
         print('5. 종료')
-        print('-'*20)
+        print('-'*30)
         select_no = int(input('번호 선택(1~5): '))
 
         if select_no == 1:    # 아이디생성
             id_result = make_id(regist_user)
             if id_result:
                 regist_user[id_result[0]] = id_result[1]
+                print('ID 생성 완료!')
+                time.sleep(1)
                 os.system('clear')
 
-        elif select_no == 2:  # 비번 찾기 및 재설정
-            uid = input('아이디: ')
-            if uid in regist_user:
-                print(f'{uid} / {regist_user[uid]}')
-                n_pwd = edit_password(uid, regist_user[uid])
-                regist_user[uid] = n_pwd
-                print('비번번경 완료!\n')
-                time.sleep(2)
-                os.system('clear')
+        elif select_no == 2:  # ID/PW 찾기
+            name = input('개인정보 아무거나 입력하세요: ')
+            if name in regist_id:
+                regist_num=regist_id.index(name)
+                print(f'이름:{regist_id[regist_num]}')
+                print(f'아이디:{regist_id[regist_num-2]}')
+                print(f'비밀번호:{regist_id[regist_num-1]}')
+
+                slt = input('되돌아가기 : Q ')
+                if slt == 'Q':
+                    break
             else:
-                print('등로된 아이디가 아니라고요\n')
+                print('등록된 ID가 아닙니다.\n')
+                time.sleep(1)
                 continue
         elif select_no == 3:  # 아이디 목록 확인
-            for k, v in regist_user.items():
-                print(f'id: {k} / pw: {v}')
-                time.sleep(2)
-                os.system('clear')
+            for i in regist_id:
+                print(i)
+            time.sleep(2)
+            os.system('clear')
 
         elif select_no == 4:  # 로그인
             id_input = input('ID 입력:')
@@ -122,15 +142,14 @@ def main():
                 else:
                     print('로그인 성공!')
                     continue
-            time.sleep(2)
+            time.sleep(1)
+            os.system('clear')
         elif select_no == 5:  # 종료
             sw = 0
 
         else:  # 예외처리
-            print('잘못입력했음 ㅇㅇ 1~5중에 골라라 애송아')
-            time.sleep(2)
+            print('잘못입력하셨습니다. 1~5 중에 골라주세요')
+            time.sleep(1)
             os.system('clear')
             continue
-
-
 main()
