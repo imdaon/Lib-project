@@ -72,7 +72,7 @@ def chk_password(pwd):  # 비번만들때 조건 영어&숫자 4글자 이상
     return result
 
 
-def change_password(uid, pwd):  # 비밀번호 찾기
+def change_password(pwd):  # 비밀번호 바꾸기
     n_pwd = ''
     while 1:
         pw = str(input('새로운 비번 입력:'))
@@ -86,8 +86,59 @@ def change_password(uid, pwd):  # 비밀번호 찾기
             else:
                 n_pwd = pw
                 break
-    print(f'id:{uid}, n_pwd:{n_pwd}')   # 새로운 비밀번호 및 아이디 확인
+    print('수정완료')  
+    time.sleep(1)
+    os.system('clear')
     return n_pwd
+
+def change_ID(uid):  # 아이디 변경
+    n_ID = ''
+    while 1:
+        ID = str(input('변경할 ID입력:'))
+        if ID == uid:  # 바꿀 아이디가 기본과 똑같을때
+            print(f'기존과 동일한 ID 입니다.!')
+            continue
+        else:           # 새로운 아이디 설정
+            res_ID = chk_id(ID)  # chk_ID로  조건 확인 후 res에 대입
+            if not res_ID:
+                continue
+            else:
+                n_ID = ID
+                break
+    print('수정완료')  
+    time.sleep(1)
+    os.system('clear')
+    return n_ID
+
+def change_name(name):  
+    n_name = ''
+    while 1:
+        new_name = str(input('변경할 이름입력:'))
+        if new_name == name:  
+            print(f'기존과 동일한 이름 입니다.!')
+            continue
+        else:     
+            n_name = new_name
+            break    
+    print('수정완료')  
+    time.sleep(1)
+    os.system('clear')
+    return n_name
+
+def change_num(num):  
+    n_num = ''
+    while 1:
+        new_num = str(input('변경할 번호입력:'))
+        if new_num == num:  
+            print(f'기존과 동일한 번호 입니다.!')
+            continue
+        else:     
+            n_num = new_num
+            break    
+    print('수정완료')  
+    time.sleep(1)
+    os.system('clear')
+    return n_num
 
 
 def main():
@@ -114,15 +165,15 @@ def main():
                 os.system('clear')
 
         elif select_no == 2:  # ID/PW 찾기
-            name = input('개인정보 아무거나 입력하세요: ')
+            name = input('회원가입한 이름을 입력하세요: ')
             if name in regist_id:
-                regist_num=regist_id.index(name)
-                print(f'이름:{regist_id[regist_num]}')
-                print(f'아이디:{regist_id[regist_num-2]}')
-                print(f'비밀번호:{regist_id[regist_num-1]}')
+                print(f'아이디:{regist_id[0]}')
+                print(f'비밀번호:{regist_id[1]}')
 
                 slt = input('되돌아가기 : Q ')
                 if slt == 'Q':
+                    time.sleep(2)
+                    os.system('clear')
                     break
             else:
                 print('등록된 ID가 아닙니다.\n')
@@ -137,27 +188,62 @@ def main():
         elif select_no == 4:  # 로그인
             id_input = input('ID 입력:')
             pw_input = input('PW 입력:')
-            for i, j in regist_user.items():  # items 로 아이디,비번 각각 확인 후 비교
-                if (id_input == f'{i}' and pw_input == f'{j}') == False:
-                    print('로그인 실패!')
-                else:
-                    print('로그인 성공!')
-                    continue
-            time.sleep(1)
-            os.system('clear')
-        elif select_no == 5:  # 비번 찾기 및 재설정
-            uid = input('아이디: ')
-            if uid in regist_user:
-                print(f'{uid} / {regist_user[uid]}')
-                n_pwd = edit_password(uid, regist_user[uid])
-                regist_user[uid] = n_pwd
-                print('비번번경 완료!\n')
-                time.sleep(2)
+
+            if (id_input ==regist_id[0]  and pw_input == regist_id[1]):
+                print('로그인 성공!')
+                time.sleep(1)
                 os.system('clear')
             else:
-                print('등로된 아이디가 아니라고요\n')
+                print('로그인 실패!')
+                time.sleep(1)
+                os.system('clear')
                 continue
-
+            
+        
+        elif select_no == 5: # 내정보변경
+            print('1)아이디 변경 2)비밀번호 변경 3)이름 변경 4)번호 변경')
+            slt = int(input('선택해주세요:'))
+            if(slt == 1):
+                uid = str(input('아이디를 입력해주세요:'))
+                if uid in regist_id:
+                    new_id=change_ID(uid)
+                    regist_user[uid] = new_id
+                    regist_id[0]=new_id
+                    print('아이디 변경 완료\n')
+                else:
+                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
+                    continue
+            elif(slt == 2):
+                uid = str(input('아이디를 입력해주세요:'))
+                if uid in regist_id:
+                    new_pwd=change_password(uid)
+                    regist_user[uid] = new_pwd
+                    regist_id[1]=new_pwd
+                    print('비밀번호 변경 완료\n')
+                else:
+                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
+                    continue
+            elif(slt == 3):
+                uid = str(input('아이디를 입력해주세요:'))
+                if uid in regist_id:
+                    new_name=change_name(uid)
+                    regist_user[uid] = new_name
+                    regist_id[2]=new_name
+                    print('이름 변경 완료\n')
+                else:
+                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
+                    continue
+            elif(slt == 4):
+                uid = str(input('아이디를 입력해주세요:'))
+                if uid in regist_id:
+                    new_num=change_num(uid)
+                    regist_user[uid] = new_num
+                    regist_id[3]=new_num
+                    print('번호 변경 완료\n')
+                else:
+                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
+                    continue
+                
         elif select_no == 6:  # 종료
             sw = 0
 
