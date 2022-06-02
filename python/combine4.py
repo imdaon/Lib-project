@@ -316,7 +316,7 @@ def change_ID(uid):  # 아이디 변경
     return n_ID
 
 def change_name(name):  
-    n_name = ''
+    global uid
     while 1:
         new_name = str(input('변경할 이름입력:'))
         if new_name == name:  
@@ -333,7 +333,7 @@ def change_name(name):
     return n_name
 
 def change_num(num):  
-    n_num = ''
+    global uid
     while 1:
         new_num = str(input('변경할 번호입력:'))
         if new_num == num:  
@@ -486,10 +486,11 @@ def main2():
                     print(search)
                     time.sleep(2)
                     break
-            else:
-                print('등록된 ID가 아닙니다.\n')
-                time.sleep(1)
-                continue
+                else:
+                    #print('등록된 ID가 아닙니다.\n')
+                    time.sleep(1)
+                    continue
+
         elif select_no == 3:  # 아이디 목록 확인
             for i in db_user:
                 print(i)
@@ -510,19 +511,9 @@ def main2():
                 continue
                 
         elif select_no == 5: # 내정보변경
-            print('1)아이디 변경 2)비밀번호 변경 3)이름 변경 4)번호 변경')
+            print('1)비밀번호 변경 2)이름 변경 3)번호 변경')
             slt = int(input('선택해주세요:'))
             if(slt == 1):
-                uid = str(input('아이디를 입력해주세요:'))
-                if uid in regist_id:
-                    new_id=change_ID(uid)
-                    regist_user[uid] = new_id
-                    regist_id[0]=new_id
-                    print('아이디 변경 완료\n')
-                else:
-                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
-                    continue
-            elif(slt == 2):
                 uid = str(input('아이디를 입력해주세요:'))
                 c.execute("SELECT id FROM userlist") 
                 db_id = c.fetchall()
@@ -532,29 +523,32 @@ def main2():
                         regist_user[uid] = new_pwd
                         regist_id[1]=new_pwd
                         print('비밀번호 변경 완료\n')
-                else:
-                        print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
+                    else:
+                        continue
+            elif(slt == 2):
+                uid = str(input('아이디를 입력해주세요:'))
+                c.execute("SELECT id FROM userlist") 
+                db_id = c.fetchall()
+                for search in db_id:
+                    if uid in search:
+                        new_name=change_name(name)
+                        regist_user[uid] = new_name
+                        regist_id[2]=new_name
+                        print('이름 변경 완료\n')
+                    else:
                         continue
             elif(slt == 3):
                 uid = str(input('아이디를 입력해주세요:'))
-                if uid in regist_id:
-                    new_name=change_name(name)
-                    regist_user[uid] = new_name
-                    regist_id[2]=new_name
-                    print('이름 변경 완료\n')
-                else:
-                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
-                    continue
-            elif(slt == 4):
-                uid = str(input('아이디를 입력해주세요:'))
-                if uid in regist_id:
-                    new_num=change_num(num)
-                    regist_user[uid] = new_num
-                    regist_id[3]=new_num
-                    print('번호 변경 완료\n')
-                else:
-                    print('등록되어 있지 않은 아이디입니다. 아이디를 확인해주세요\n')
-                    continue
+                c.execute("SELECT id FROM userlist") 
+                db_id = c.fetchall()
+                for search in db_id:
+                    if uid in search:
+                        new_num=change_num(num)
+                        regist_user[uid] = new_num
+                        regist_id[3]=new_num
+                        print('번호 변경 완료\n')
+                    else:
+                        continue
                 
         elif select_no == 6:  # 종료
             sw = 0
