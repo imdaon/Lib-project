@@ -66,6 +66,7 @@ def bucket_book():  # 장바구니
                 print(f"장바구니 리스트 {bucket}\n")
                 print('===============================================')
             else:
+                os.system("clear")
                 print('error 이미 대여중인 책입니다')
                 time.sleep(2)
 
@@ -127,7 +128,6 @@ def rent_book():  # 대여
                     else:
                         cur.execute("SELECT rentcount FROM userlist WHERE id=?", (userid,))  # 입력한 아이디의 행 수를 count
                         count = cur.fetchone()
-                        print(f'{count[0]}가뭐임')
                         if count[0] >= 3:
                             print('최대 대여 권수를 초과했습니다')
                             rentBool = False
