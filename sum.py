@@ -196,7 +196,6 @@ def return_book():
         turnnum = input('반납할 책 번호를 입력해주세요')
         cur.execute('SELECT booknum,bookname,userid,date from rentlist where booknum=?', (turnnum,))
         find = (cur.fetchone())
-        print(f'find가 뭐야? {find}')
 
         if find is None:
             print('error 입력 정보를 확인해주세요')
